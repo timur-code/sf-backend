@@ -6,43 +6,28 @@ import com.rant.sfbackend.repositories.UserRepository;
 import com.rant.sfbackend.requestForm.UserRequest;
 import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
     private final UserRepository userRepository;
     private final UserFactory userFactory;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.userFactory = UserFactory.getInstance();
+        this.passwordEncoder = passwordEncoder;
     }
 
-    public JSONObject createUser(String email, String fullName,
-                                 String phone, String password) {
-        User newUser = userFactory.createUser(email, fullName, phone, password);
+    public void createUser(UserRequest userRequest) {
+        String encodedPassword = passwordEncoder.encode(userRequest.getPassword());
+
+        User newUser = new User(userRequest.getEmail(), userRequest.getFullName(),
+                userRequest.getPhone(), encodedPassword);
 
         userRepository.save(newUser);
-
-        JSONObject userJson = new JSONObject();
-        userJson.appendField("email", newUser.getEmail());
-        userJson.appendField("fullName", newUser.getFullName());
-        userJson.appendField("phone", newUser.getPhone());
-
-        return userJson;
-    }
-
-    public JSONObject createUser(UserRequest userRequest) {
-        User newUser = userFactory.createUser(userRequest);
-
-        userRepository.save(newUser);
-
-        JSONObject userJson = new JSONObject();
-        userJson.appendField("email", newUser.getEmail());
-        userJson.appendField("fullName", newUser.getFullName());
-        userJson.appendField("phone", newUser.getPhone());
-
-        return userJson;
     }
 }

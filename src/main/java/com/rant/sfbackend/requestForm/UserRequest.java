@@ -7,6 +7,5 @@ public class UserRequest {
     private String email;
     private String fullName;
     private String phone;
-    @ToString.Exclude
     private String password;
 }

@@ -10,8 +10,12 @@ import org.springframework.stereotype.Service;
 @Service
 @NoArgsConstructor
 public final class UserFactory {
-    @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    public UserFactory(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
 
     private static volatile UserFactory instance;
 
@@ -36,6 +40,7 @@ public final class UserFactory {
     }
 
     public User createUser(UserRequest userRequest) {
+        System.out.println(userRequest.toString());
         String encodedPassword = passwordEncoder.encode(userRequest.getPassword());
 
         return new User(userRequest.getEmail(), userRequest.getFullName(),

@@ -4,6 +4,7 @@ import com.rant.sfbackend.requestForm.UserRequest;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table (name = "users")
@@ -21,6 +22,8 @@ public class User {
     private String phone;
     @ToString.Exclude
     private String password;
+    private Boolean active;
+    private String roles;
 //    private Wallet wallet;
 //    private List<Product> productList;
 
@@ -30,6 +33,8 @@ public class User {
         this.fullName = fullName;
         this.phone = phone;
         this.password = password;
+        this.active = true;
+        this.roles = "user";
     }
 
     //TODO: add wallet functionality

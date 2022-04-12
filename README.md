@@ -1,4 +1,6 @@
 # sf-backend
+## О проекте
+Данный проект создан командой RANT для Software Factory
 
 ## Установка
 Для установки и запуска сервера необходимо скачать репозиторий, установить базу данных PostgreSQL и создать базу с названием "SF-DB", имя и пароль должны быть либо postges, postgres, либо поменяйте spring.datasource.username и spring.datasource.password в файле application.properties.

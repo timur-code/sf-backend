@@ -1,4 +1,4 @@
-package com.rant.sfbackend.requestForm;
+package com.rant.sfbackend.DTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

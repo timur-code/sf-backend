@@ -1,10 +1,8 @@
 package com.rant.sfbackend.model;
 
-import com.rant.sfbackend.requestForm.UserRequest;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Table (name = "users")
@@ -24,7 +22,8 @@ public class User {
     private String password;
     private Boolean active;
     private String roles;
-//    private Wallet wallet;
+    @OneToOne
+    private Wallet wallet;
 //    private List<Product> productList;
 
     public User(String email, String fullName,
@@ -36,6 +35,4 @@ public class User {
         this.active = true;
         this.roles = "user";
     }
-
-    //TODO: add wallet functionality
 }

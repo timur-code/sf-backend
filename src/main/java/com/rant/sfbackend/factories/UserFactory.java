@@ -1,20 +1,15 @@
 package com.rant.sfbackend.factories;
 
+import com.rant.sfbackend.helpers.Pair;
 import com.rant.sfbackend.model.User;
-import com.rant.sfbackend.requestForm.UserRequest;
-import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import com.rant.sfbackend.model.Wallet;
+import com.rant.sfbackend.DTO.UserRequest;
 import org.springframework.stereotype.Service;
 
 @Service
-@NoArgsConstructor
 public final class UserFactory {
-    private PasswordEncoder passwordEncoder;
 
-    @Autowired
-    public UserFactory(PasswordEncoder passwordEncoder) {
-        this.passwordEncoder = passwordEncoder;
+    public UserFactory() {
     }
 
     private static volatile UserFactory instance;
@@ -34,16 +29,20 @@ public final class UserFactory {
 
     public User createUser(String email, String fullName,
                            String phone, String password) {
-        String encodedPassword = passwordEncoder.encode(password);
 
-        return new User(email, fullName, phone, encodedPassword);
+        return new User(email, fullName, phone, password);
     }
 
-    public User createUser(UserRequest userRequest) {
-        System.out.println(userRequest.toString());
-        String encodedPassword = passwordEncoder.encode(userRequest.getPassword());
+    public Pair<User, Wallet> createUser(UserRequest userRequest) {
+        User newUser = new User(userRequest.getEmail(), userRequest.getFullName(),
+                userRequest.getPhone(), userRequest.getPassword());
 
-        return new User(userRequest.getEmail(), userRequest.getFullName(),
-                userRequest.getPhone(), encodedPassword);
+        Wallet wallet = new Wallet();
+
+        newUser.setWallet(wallet);
+
+        Pair<User, Wallet> pair = new Pair<>(newUser, wallet);
+
+        return pair;
     }
 }

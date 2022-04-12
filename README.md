@@ -3,7 +3,7 @@
 Данный проект создан командой RANT для Software Factory
 
 ## Установка
-Для установки и запуска сервера необходимо скачать репозиторий, установить базу данных PostgreSQL и создать базу с названием "SF-DB", имя и пароль должны быть либо postges, postgres, либо поменяйте spring.datasource.username и spring.datasource.password в файле application.properties.
+Для установки и запуска сервера необходимо скачать репозиторий, установить базу данных PostgreSQL и создать базу с названием "**SF-DB**", имя и пароль должны быть либо _postges, postgres_, либо поменяйте _spring.datasource.username_ и _spring.datasource.password_ в файле **application.properties**.
 
 Для запуска используется Maven, IntelliJ Idea не требуется, но облегчит использование.
 

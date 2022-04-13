@@ -20,6 +20,7 @@ import javax.management.InstanceAlreadyExistsException;
 import javax.servlet.http.HttpServletRequest;
 
 @Slf4j
+@CrossOrigin
 @RestController
 public class AppController {
     private final AuthenticationManager authenticationManager;
@@ -40,6 +41,11 @@ public class AppController {
     public ResponseEntity<?> getOwnInfo(HttpServletRequest request) {
         UserResponse userResponse = userService.getOwnInfo(request);
         return ResponseEntity.ok(userResponse);
+    }
+
+    @GetMapping("/hello")
+    public ResponseEntity<?> hello() {
+        return ResponseEntity.ok("Hello");
     }
 
     @PostMapping("/authenticate")

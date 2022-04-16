@@ -12,7 +12,6 @@ public class UserResponse {
     private String phone;
     private Boolean active;
     private String roles;
-    private Wallet wallet;
 
     public UserResponse(User user) {
         this.id = user.getId();
@@ -21,6 +20,5 @@ public class UserResponse {
         this.phone = user.getPhone();
         this.active = user.getActive();
         this.roles = user.getRoles();
-        this.wallet = user.getWallet();
     }
 }

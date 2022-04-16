@@ -1,5 +1,6 @@
 package com.rant.sfbackend.model;
 
+import com.rant.sfbackend.DTO.WithdrawRequest;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,9 +21,9 @@ public class Wallet {
         balance = 0L;
     }
 
-    public boolean withdraw(Long amount) {
-        if(amount <= this.balance) {
-            this.balance -= amount;
+    public boolean withdraw(WithdrawRequest withdrawRequest) {
+        if(withdrawRequest.getAmount() <= this.balance) {
+            this.balance -= withdrawRequest.getAmount();
             return true;
         }
         return false;

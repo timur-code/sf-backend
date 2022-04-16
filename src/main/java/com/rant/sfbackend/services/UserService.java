@@ -1,15 +1,14 @@
 package com.rant.sfbackend.services;
 
-import com.rant.sfbackend.DTO.UserResponse;
+import com.rant.sfbackend.DTO.*;
 import com.rant.sfbackend.factories.UserFactory;
 import com.rant.sfbackend.helpers.Pair;
 import com.rant.sfbackend.model.User;
 import com.rant.sfbackend.model.Wallet;
 import com.rant.sfbackend.repositories.UserRepository;
 import com.rant.sfbackend.repositories.WalletRepository;
-import com.rant.sfbackend.DTO.DepositRequest;
-import com.rant.sfbackend.DTO.UserRequest;
 import com.rant.sfbackend.utils.JWTUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,8 +16,10 @@ import org.springframework.stereotype.Service;
 
 import javax.management.InstanceAlreadyExistsException;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Objects;
 
 @Service
+@Slf4j
 public class UserService {
     private final UserRepository userRepository;
     private final WalletRepository walletRepository;
@@ -64,13 +65,52 @@ public class UserService {
         throw new UsernameNotFoundException("Could not find user's data");
     }
 
-    public void deposit(Long userId, DepositRequest depositRequest) {
+    public void deposit(Long userId, DepositRequest depositRequest, HttpServletRequest request) throws Exception{
+        String jwt = request.getHeader("Authorization").split(" ")[1];
+
+        String email = jwtUtil.extractUsername(jwt);
+
         User user = userRepository.getById(userId);
+
+        if(!Objects.equals(user.getEmail(), email))
+            throw new Exception("You can't deposit/withdraw to/from another user.");
 
         Wallet wallet = user.getWallet();
 
         wallet.deposit(depositRequest.getAmount());
 
         walletRepository.save(wallet);
+    }
+
+    public void withdraw(Long userId, WithdrawRequest withdrawRequest, HttpServletRequest request)
+            throws IllegalAccessException, ArithmeticException {
+        String jwt = request.getHeader("Authorization").split(" ")[1];
+
+        String email = jwtUtil.extractUsername(jwt);
+
+        User user = userRepository.getById(userId);
+
+        if(!Objects.equals(user.getEmail(), email))
+            throw new IllegalAccessException("You can't deposit/withdraw to/from another user.");
+
+        Wallet wallet = user.getWallet();
+
+        if(wallet.withdraw(withdrawRequest))
+            throw new ArithmeticException("Not enough funds.");
+        walletRepository.save(wallet);
+    }
+
+    public WalletResponse getBalance(Long userId, HttpServletRequest request)
+            throws IllegalAccessException {
+        String jwt = request.getHeader("Authorization").split(" ")[1];
+
+        String email = jwtUtil.extractUsername(jwt);
+
+        User user = userRepository.getById(userId);
+
+        if(!Objects.equals(user.getEmail(), email))
+            throw new IllegalAccessException("You can't see balance of another user.");
+
+        return new WalletResponse(user.getWallet());
     }
 }

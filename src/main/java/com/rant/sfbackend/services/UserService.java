@@ -95,7 +95,7 @@ public class UserService {
 
         Wallet wallet = user.getWallet();
 
-        if(wallet.withdraw(withdrawRequest))
+        if(!wallet.withdraw(withdrawRequest))
             throw new ArithmeticException("Not enough funds.");
         walletRepository.save(wallet);
     }

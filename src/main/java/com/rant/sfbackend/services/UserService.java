@@ -65,6 +65,22 @@ public class UserService {
         throw new UsernameNotFoundException("Could not find user's data");
     }
 
+
+    public WalletResponse getBalance(Long userId, HttpServletRequest request)
+            throws IllegalAccessException {
+        String jwt = request.getHeader("Authorization").split(" ")[1];
+
+        String email = jwtUtil.extractUsername(jwt);
+
+        User user = userRepository.getById(userId);
+
+        if(!Objects.equals(user.getEmail(), email))
+            throw new IllegalAccessException("You can't see balance of another user.");
+
+        return new WalletResponse(user.getWallet());
+    }
+
+    // TODO: Add Log model in DB to save deposits/withdrawals/transfers
     public void deposit(Long userId, DepositRequest depositRequest, HttpServletRequest request) throws Exception{
         String jwt = request.getHeader("Authorization").split(" ")[1];
 
@@ -100,17 +116,35 @@ public class UserService {
         walletRepository.save(wallet);
     }
 
-    public WalletResponse getBalance(Long userId, HttpServletRequest request)
-            throws IllegalAccessException {
+    public TransferResponse transferMoney(Long userId, TransferRequest transferRequest, HttpServletRequest request)
+        throws IllegalAccessException {
         String jwt = request.getHeader("Authorization").split(" ")[1];
 
         String email = jwtUtil.extractUsername(jwt);
 
-        User user = userRepository.getById(userId);
+        User userFrom = userRepository.getById(userId);
 
-        if(!Objects.equals(user.getEmail(), email))
+        if(!Objects.equals(userFrom.getEmail(), email))
             throw new IllegalAccessException("You can't see balance of another user.");
 
-        return new WalletResponse(user.getWallet());
+        User userTo;
+        if(userRepository.getUserByEmail(transferRequest.getUserTo()) != null)
+            userTo = userRepository.getUserByEmail(transferRequest.getUserTo());
+        else if(userRepository.getUserByPhone(transferRequest.getUserTo()) != null)
+            userTo = userRepository.getUserByPhone(transferRequest.getUserTo());
+        else
+            throw new UsernameNotFoundException("Can't find user with this email/phone");
+
+        Wallet walletFrom = userFrom.getWallet();
+        if(!walletFrom.withdraw(transferRequest.getAmount()))
+            throw new ArithmeticException("Not enough funds.");
+
+        Wallet walletTo = userTo.getWallet();
+        walletTo.deposit(transferRequest.getAmount());
+
+        walletRepository.save(walletFrom);
+        walletRepository.save(walletTo);
+
+        return new TransferResponse(userFrom.getFullName(), userTo.getFullName(), transferRequest.getAmount());
     }
 }

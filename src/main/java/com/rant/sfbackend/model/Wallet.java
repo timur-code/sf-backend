@@ -29,6 +29,14 @@ public class Wallet {
         return false;
     }
 
+    public boolean withdraw(Long amount) {
+        if(amount <= this.balance) {
+            this.balance -= amount;
+            return true;
+        }
+        return false;
+    }
+
     public void deposit(Long amount) {
         this.balance += amount;
     }

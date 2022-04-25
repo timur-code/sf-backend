@@ -1,11 +1,10 @@
 package com.rant.sfbackend.controllers;
 
-import com.rant.sfbackend.DTO.DepositRequest;
-import com.rant.sfbackend.DTO.WalletResponse;
-import com.rant.sfbackend.DTO.WithdrawRequest;
+import com.rant.sfbackend.DTO.*;
 import com.rant.sfbackend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -54,5 +53,18 @@ public class UserController {
         }
 
         return ResponseEntity.ok(walletResponse);
+    }
+
+    @PostMapping("/{userId}/transfer")
+    public ResponseEntity<?> transferMoney (@PathVariable(value = "userId") Long userId,
+                                            @RequestBody TransferRequest transferRequest, HttpServletRequest request) {
+        TransferResponse transferResponse = new TransferResponse();
+        try {
+            transferResponse = userService.transferMoney(userId, transferRequest, request);
+        } catch (IllegalAccessException | UsernameNotFoundException | ArithmeticException ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
+
+        return ResponseEntity.ok(transferResponse);
     }
 }

@@ -1,8 +1,11 @@
 package com.rant.sfbackend.DTO;
 
+import com.rant.sfbackend.model.Role;
 import com.rant.sfbackend.model.User;
 import com.rant.sfbackend.model.Wallet;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 public class UserResponse {
@@ -11,7 +14,7 @@ public class UserResponse {
     private String fullName;
     private String phone;
     private Boolean active;
-    private String roles;
+    private List<Role> roles;
 
     public UserResponse(User user) {
         this.id = user.getId();

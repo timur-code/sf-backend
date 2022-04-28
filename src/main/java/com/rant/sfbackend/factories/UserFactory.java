@@ -4,27 +4,17 @@ import com.rant.sfbackend.helpers.Pair;
 import com.rant.sfbackend.model.User;
 import com.rant.sfbackend.model.Wallet;
 import com.rant.sfbackend.DTO.UserRequest;
+import com.rant.sfbackend.repositories.RoleRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public final class UserFactory {
+    private final RoleRepository roleRepository;
 
-    public UserFactory() {
-    }
-
-    private static volatile UserFactory instance;
-
-    public static UserFactory getInstance() {
-        UserFactory result = instance;
-        if (result != null) {
-            return result;
-        }
-        synchronized (UserFactory.class) {
-            if(instance == null) {
-                instance = new UserFactory();
-            }
-            return instance;
-        }
+    @Autowired
+    public UserFactory(RoleRepository roleRepository) {
+        this.roleRepository = roleRepository;
     }
 
     public User createUser(String email, String fullName,
@@ -36,6 +26,9 @@ public final class UserFactory {
     public Pair<User, Wallet> createUser(UserRequest userRequest) {
         User newUser = new User(userRequest.getEmail(), userRequest.getFullName(),
                 userRequest.getPhone(), userRequest.getPassword());
+
+        System.out.println(roleRepository);
+        newUser.getRoles().add(roleRepository.findByAuthority("user"));
 
         Wallet wallet = new Wallet();
 

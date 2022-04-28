@@ -29,10 +29,10 @@ public class UserService {
 
     @Autowired
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder,
-                       WalletRepository walletRepository, JWTUtil jwtUtil) {
+                       WalletRepository walletRepository, UserFactory userFactory, JWTUtil jwtUtil) {
         this.userRepository = userRepository;
         this.walletRepository = walletRepository;
-        this.userFactory = UserFactory.getInstance();
+        this.userFactory = userFactory;
         this.passwordEncoder = passwordEncoder;
         this.jwtUtil = jwtUtil;
     }

@@ -1,30 +1,26 @@
 package com.rant.sfbackend.security;
 
+import com.rant.sfbackend.model.Role;
 import com.rant.sfbackend.model.User;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @NoArgsConstructor
 public class CustomUserDetails implements UserDetails {
     private String email;
     private String password;
     private boolean active;
-    private List<GrantedAuthority> authorities;
+    private List<Role> authorities;
 
     public CustomUserDetails(User user) {
         this.email = user.getEmail();
         this.password = user.getPassword();
         this.active = user.getActive();
-        this.authorities = Arrays.stream(user.getRoles().split(","))
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
+        this.authorities = user.getRoles();
     }
 
     @Override

@@ -3,6 +3,8 @@ package com.rant.sfbackend.model;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table (name = "users")
@@ -21,7 +23,8 @@ public class User {
     @ToString.Exclude
     private String password;
     private Boolean active;
-    private String roles;
+    @ManyToMany
+    private List<Role> roles;
     @OneToOne
     private Wallet wallet;
 //    private List<Product> productList;
@@ -33,6 +36,6 @@ public class User {
         this.phone = phone;
         this.password = password;
         this.active = true;
-        this.roles = "user";
+        this.roles = new ArrayList<>();
     }
 }

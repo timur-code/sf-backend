@@ -19,6 +19,7 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
+    private String imgLink;
     private String description;
     private Integer price;
     @ManyToOne
@@ -27,6 +28,7 @@ public class Product {
 
     public Product (ProductRequest productRequest, User owner) {
         this.name = productRequest.getName();
+        this.imgLink = productRequest.getImgLink();
         this.description = productRequest.getDescription();
         this.price = productRequest.getPrice();
         this.owner = owner;

@@ -99,8 +99,6 @@ public class ProductService {
         Product product = verifyAndGetProduct(productId);
 
         user.getCart().add(product);
-        product.setBought(true);
-        productRepository.save(product);
         userRepository.save(user);
 
         return new ProductResponse(product);

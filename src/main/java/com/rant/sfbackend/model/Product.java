@@ -23,11 +23,13 @@ public class Product {
     private Integer price;
     @ManyToOne
     private User owner;
+    private boolean isBought;
 
     public Product (ProductRequest productRequest, User owner) {
         this.name = productRequest.getName();
         this.description = productRequest.getDescription();
         this.price = productRequest.getPrice();
         this.owner = owner;
+        this.isBought = false;
     }
 }

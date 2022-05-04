@@ -27,6 +27,8 @@ public class User {
     private List<Role> roles;
     @OneToOne
     private Wallet wallet;
+    @ManyToMany
+    private List<Product> cart;
 
     public User(String email, String fullName,
                 String phone, String password) {
@@ -36,5 +38,6 @@ public class User {
         this.password = password;
         this.active = true;
         this.roles = new ArrayList<>();
+        this.cart = new ArrayList<>();
     }
 }

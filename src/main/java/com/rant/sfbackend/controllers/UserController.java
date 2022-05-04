@@ -1,6 +1,7 @@
 package com.rant.sfbackend.controllers;
 
 import com.rant.sfbackend.DTO.*;
+import com.rant.sfbackend.services.ProductService;
 import com.rant.sfbackend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -8,15 +9,18 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @RestController
 @RequestMapping("/user")
 public class UserController {
     private final UserService userService;
+    private final ProductService productService;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, ProductService productService) {
         this.userService = userService;
+        this.productService = productService;
     }
 
     @PostMapping("/{userId}/deposit")
@@ -66,5 +70,16 @@ public class UserController {
         }
 
         return ResponseEntity.ok(transferResponse);
+    }
+
+    @GetMapping("/{userId}/products")
+    public ResponseEntity<?> productsFromUser (HttpServletRequest request) {
+        List<ProductResponse> products;
+        try {
+            products = productService.getProductsFromUser(request);
+        } catch (UsernameNotFoundException ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
+        return ResponseEntity.ok(products);
     }
 }

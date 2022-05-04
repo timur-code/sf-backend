@@ -23,11 +23,10 @@ public class User {
     @ToString.Exclude
     private String password;
     private Boolean active;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Role> roles;
     @OneToOne
     private Wallet wallet;
-//    private List<Product> productList;
 
     public User(String email, String fullName,
                 String phone, String password) {

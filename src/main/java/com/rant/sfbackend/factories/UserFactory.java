@@ -27,7 +27,6 @@ public final class UserFactory {
         User newUser = new User(userRequest.getEmail(), userRequest.getFullName(),
                 userRequest.getPhone(), userRequest.getPassword());
 
-        System.out.println(roleRepository);
         newUser.getRoles().add(roleRepository.findByAuthority("user"));
 
         Wallet wallet = new Wallet();

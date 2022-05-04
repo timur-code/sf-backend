@@ -2,7 +2,6 @@ package com.rant.sfbackend.DTO;
 
 import com.rant.sfbackend.model.Role;
 import com.rant.sfbackend.model.User;
-import com.rant.sfbackend.model.Wallet;
 import lombok.Data;
 
 import java.util.List;

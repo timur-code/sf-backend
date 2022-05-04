@@ -54,8 +54,6 @@ public class UserService {
     public UserResponse getOwnInfo(HttpServletRequest request) throws UsernameNotFoundException{
         String jwt = request.getHeader("Authorization").split(" ")[1];
 
-        System.out.println(jwt);
-
         String userEmail = jwtUtil.extractUsername(jwt);
         UserResponse userResponse = new UserResponse(userRepository.getUserByEmail(userEmail));
 

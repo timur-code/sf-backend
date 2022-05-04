@@ -30,3 +30,24 @@
 
 ## Трансфер денег
 Для трансфера денег от одного пользователя к другому сделайте **POST** запрос в **_https://sf-rant-backend.herokuapp.com/user/{userId}/transfer_** с JWT токеном как **Authorization** header (формат запроса как в [DTO/TransferRequest.java](https://github.com/timur-code/sf-backend/blob/master/src/main/java/com/rant/sfbackend/DTO/TransferRequest.java)). В ответ придет сообщение об успешной операции (200), если все в порядке (формат ответа как в [DTO/TransferResponse.java](https://github.com/timur-code/sf-backend/blob/master/src/main/java/com/rant/sfbackend/DTO/TransferResponse.java)). Если один пользователь попробует перевести деньги с другого аккаунта, то выйдет ошибка (400). Желательно не давать такую возможность пользователя ещё с фронт-энда.
+
+## Добавление товаров в магазин
+Для добавления продукта нужно отправить **POST** запрос в **_https://sf-rant-backend.herokuapp.com/market/add_** с JWT токеном как **Authorization** header (формат запроса как в [DTO/ProductRequest.java](https://github.com/timur-code/sf-backend/blob/master/src/main/java/com/rant/sfbackend/DTO/ProductRequest.java)). В ответ придет сообщение об успешной операции (200), если все в порядке (формат ответа как в [DTO/ProductResponse.java](https://github.com/timur-code/sf-backend/blob/master/src/main/java/com/rant/sfbackend/DTO/ProductResponse.java)).
+
+## Получить информацию о товаре
+Для получения продукта нужно отправить **GET** запрос в **_https://sf-rant-backend.herokuapp.com/market/{productId}/get_** с JWT токеном как **Authorization** header. В ответ придет сообщение об успешной операции (200), если все в порядке (формат ответа как в [DTO/ProductResponse.java](https://github.com/timur-code/sf-backend/blob/master/src/main/java/com/rant/sfbackend/DTO/ProductResponse.java)).
+
+## Получить продукты, высставленные пользователем
+Для получения продуктов нужно отправить **GET** запрос в **_https://sf-rant-backend.herokuapp.com/user/{userId}/products_** с JWT токеном как **Authorization** header. В ответ придет сообщение об успешной операции (200), если все в порядке (формат ответа это **массив** [DTO/ProductResponse.java](https://github.com/timur-code/sf-backend/blob/master/src/main/java/com/rant/sfbackend/DTO/ProductResponse.java)).
+
+## Получить все продукты в магазине
+Для получения продуктов нужно отправить **GET** запрос в **_https://sf-rant-backend.herokuapp.com/market/getAll_** с JWT токеном как **Authorization** header. В ответ придет сообщение об успешной операции (200), если все в порядке (формат ответа это **массив** [DTO/ProductResponse.java](https://github.com/timur-code/sf-backend/blob/master/src/main/java/com/rant/sfbackend/DTO/ProductResponse.java)).
+
+## Добавление товаров в корзину
+Для добавления продукта нужно отправить **POST** запрос в **_https://sf-rant-backend.herokuapp.com/market/{productId}/add_** с JWT токеном как **Authorization** header. В ответ придет сообщение об успешной операции (200), если все в порядке (формат ответа как в [DTO/ProductResponse.java](https://github.com/timur-code/sf-backend/blob/master/src/main/java/com/rant/sfbackend/DTO/ProductResponse.java)).
+
+## Получить корзину пользователя
+Для получения продуктов из корзины нужно отправить **POST** запрос в **_https://sf-rant-backend.herokuapp.com/market/cart_** с JWT токеном как **Authorization** header. В ответ придет сообщение об успешной операции (200), если все в порядке (формат ответа это **массив** [DTO/ProductResponse.java](https://github.com/timur-code/sf-backend/blob/master/src/main/java/com/rant/sfbackend/DTO/ProductResponse.java)).
+
+## Купить товары в корзине
+Для добавления продукта нужно отправить **POST** запрос в **_https://sf-rant-backend.herokuapp.com/market/cart/buy_** с JWT токеном как **Authorization** header. В ответ придет сообщение об успешной операции (200), если все в порядке (формат ответа это **массив** [DTO/ProductResponse.java](https://github.com/timur-code/sf-backend/blob/master/src/main/java/com/rant/sfbackend/DTO/ProductResponse.java)).

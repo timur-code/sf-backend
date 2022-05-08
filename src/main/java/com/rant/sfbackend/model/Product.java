@@ -21,6 +21,8 @@ public class Product {
     private String name;
     private String imgLink;
     private String description;
+    @ManyToOne
+    private Category category;
     private Integer price;
     @ManyToOne
     private User owner;
@@ -29,10 +31,11 @@ public class Product {
     @ManyToOne
     private User buyer;
 
-    public Product (ProductRequest productRequest, User owner) {
+    public Product (ProductRequest productRequest, User owner, Category category) {
         this.name = productRequest.getName();
         this.imgLink = productRequest.getImgLink();
         this.description = productRequest.getDescription();
+        this.category = category;
         this.price = productRequest.getPrice();
         this.owner = owner;
         this.isBought = false;

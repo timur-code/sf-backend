@@ -7,5 +7,6 @@ public class ProductRequest {
     private String name;
     private String imgLink;
     private String description;
+    private String categoryName;
     private Integer price;
 }

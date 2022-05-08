@@ -30,7 +30,7 @@ public class MarketController {
         ProductResponse productResponse;
         try {
             productResponse = productService.createProduct(productRequest, httpServletRequest);
-        } catch (UsernameNotFoundException ex) {
+        } catch (UsernameNotFoundException | NotFoundException ex) {
             return ResponseEntity.badRequest().body(ex.getMessage());
         }
         return ResponseEntity.ok(productResponse);

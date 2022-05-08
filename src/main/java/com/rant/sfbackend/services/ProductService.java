@@ -2,9 +2,10 @@ package com.rant.sfbackend.services;
 
 import com.rant.sfbackend.DTO.ProductRequest;
 import com.rant.sfbackend.DTO.ProductResponse;
-import com.rant.sfbackend.factories.ProductFactory;
+import com.rant.sfbackend.model.Category;
 import com.rant.sfbackend.model.Product;
 import com.rant.sfbackend.model.User;
+import com.rant.sfbackend.repositories.CategoryRepository;
 import com.rant.sfbackend.repositories.ProductRepository;
 import com.rant.sfbackend.repositories.UserRepository;
 import com.rant.sfbackend.repositories.WalletRepository;
@@ -26,24 +27,27 @@ public class ProductService {
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
     private final WalletRepository walletRepository;
-    private final ProductFactory productFactory;
+    private final CategoryRepository categoryRepository;
     private final JWTUtil jwtUtil;
 
     @Autowired
     public ProductService(UserRepository userRepository, ProductRepository productRepository,
-                          WalletRepository walletRepository, ProductFactory productFactory, JWTUtil jwtUtil) {
+                          CategoryRepository categoryRepository, WalletRepository walletRepository, JWTUtil jwtUtil) {
         this.userRepository = userRepository;
         this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
         this.walletRepository = walletRepository;
-        this.productFactory = productFactory;
         this.jwtUtil = jwtUtil;
     }
 
     public ProductResponse createProduct(ProductRequest productRequest, HttpServletRequest httpServletRequest)
-            throws UsernameNotFoundException {
+            throws UsernameNotFoundException, NotFoundException {
         User owner = verifyAndGetUser(httpServletRequest);
 
-        Product product = productFactory.createProduct(productRequest, owner);
+        Category category = categoryRepository.findByCategoryName(productRequest.getCategoryName());
+        if (category == null)
+            throw new NotFoundException("Can't find this category.");
+        Product product = new Product(productRequest, owner, category);
         productRepository.save(product);
 
         return new ProductResponse(product);

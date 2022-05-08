@@ -9,6 +9,7 @@ public class ProductResponse {
     private String name;
     private String imgLink;
     private String description;
+    private String categoryName;
     private Integer price;
     private UserResponse owner;
 
@@ -17,6 +18,7 @@ public class ProductResponse {
         this.name = product.getName();
         this.imgLink = product.getImgLink();
         this.description = product.getDescription();
+        this.categoryName = product.getCategory().getCategoryName();
         this.price = product.getPrice();
         this.owner = new UserResponse(product.getOwner());
     }

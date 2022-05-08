@@ -25,6 +25,9 @@ public class Product {
     @ManyToOne
     private User owner;
     private boolean isBought;
+    private boolean isInCart;
+    @ManyToOne
+    private User buyer;
 
     public Product (ProductRequest productRequest, User owner) {
         this.name = productRequest.getName();
@@ -33,5 +36,7 @@ public class Product {
         this.price = productRequest.getPrice();
         this.owner = owner;
         this.isBought = false;
+        this.isInCart = false;
+        this.buyer = null;
     }
 }

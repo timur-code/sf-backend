@@ -52,7 +52,7 @@ public class ProductService {
     public ProductResponse getProduct(Long productId) throws NotFoundException {
         Optional<Product> product = productRepository.findById(productId);
 
-        if (product.isEmpty())
+        if (product.isEmpty() || product.get().isInCart())
             throw new NotFoundException("Product was not found.");
 
         if (product.get().isBought())
@@ -65,7 +65,7 @@ public class ProductService {
         List<Product> products = productRepository.findAll();
         List<ProductResponse> productResponses = new ArrayList<>();
         for(Product product: products) {
-            if(!product.isBought())
+            if(!product.isBought() && !product.isInCart())
                 productResponses.add(new ProductResponse(product));
         }
         return productResponses;
@@ -98,7 +98,26 @@ public class ProductService {
 
         Product product = verifyAndGetProduct(productId);
 
+        if (user.getCart().contains(product))
+            throw new NotFoundException("Product is already in the cart.");
+
+        product.setInCart(true);
         user.getCart().add(product);
+        userRepository.save(user);
+
+        return new ProductResponse(product);
+    }
+
+    public ProductResponse removeProductFromUserCart(Long productId, HttpServletRequest request) throws NotFoundException, UsernameNotFoundException {
+        User user = verifyAndGetUser(request);
+
+        Product product = verifyAndGetProduct(productId);
+
+        if (!user.getCart().contains(product))
+            throw new NotFoundException("Product is not in the cart.");
+
+        product.setInCart(false);
+        user.getCart().remove(product);
         userRepository.save(user);
 
         return new ProductResponse(product);
@@ -116,8 +135,10 @@ public class ProductService {
         if (!user.getWallet().withdraw(total))
             throw new ArithmeticException("Not enough funds to buy.");
 
-        for (Product product: user.getCart())
+        for (Product product: user.getCart()) {
             product.setBought(true);
+            product.setBuyer(user);
+        }
 
         walletRepository.save(user.getWallet());
         productRepository.saveAll(user.getCart());

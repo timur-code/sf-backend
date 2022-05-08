@@ -48,7 +48,7 @@ public class MarketController {
     }
 
     @GetMapping("/getAll")
-    public ResponseEntity<?> getProduct() {
+    public ResponseEntity<?> getAllProducts() {
         List<ProductResponse> productResponseList = productService.getAllProducts();
         return ResponseEntity.ok(productResponseList);
     }
@@ -58,6 +58,17 @@ public class MarketController {
         ProductResponse product;
         try {
             product = productService.addProductToUserCart(productId, request);
+        } catch (UsernameNotFoundException | NotFoundException ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
+        return ResponseEntity.ok(product);
+    }
+
+    @PostMapping("/cart/{productId}/remove")
+    public ResponseEntity<?> removeItemFromCart(@PathVariable(value = "productId") Long productId,HttpServletRequest request) {
+        ProductResponse product;
+        try {
+            product = productService.removeProductFromUserCart(productId, request);
         } catch (UsernameNotFoundException | NotFoundException ex) {
             return ResponseEntity.badRequest().body(ex.getMessage());
         }

@@ -2,6 +2,7 @@ package com.rant.sfbackend.controllers;
 
 import com.rant.sfbackend.DTO.ProductRequest;
 import com.rant.sfbackend.DTO.ProductResponse;
+import com.rant.sfbackend.model.Category;
 import com.rant.sfbackend.services.ProductService;
 import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -51,6 +52,11 @@ public class MarketController {
     public ResponseEntity<?> getAllProducts() {
         List<ProductResponse> productResponseList = productService.getAllProducts();
         return ResponseEntity.ok(productResponseList);
+    }
+
+    @GetMapping("/getCategories")
+    public ResponseEntity<?> getAllCategories() {
+        return ResponseEntity.ok(productService.getCategories());
     }
 
     @PostMapping("/{productId}/add")

@@ -87,6 +87,10 @@ public class ProductService {
         return productResponses;
     }
 
+    public List<Category> getCategories () {
+        return categoryRepository.findAll();
+    }
+
     public List<ProductResponse> getProductCart(HttpServletRequest request) throws UsernameNotFoundException {
         User user = verifyAndGetUser(request);
 

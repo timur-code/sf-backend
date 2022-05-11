@@ -3,9 +3,11 @@ package com.rant.sfbackend;
 import com.rant.sfbackend.model.Category;
 import com.rant.sfbackend.model.Role;
 import com.rant.sfbackend.model.User;
+import com.rant.sfbackend.model.Wallet;
 import com.rant.sfbackend.repositories.CategoryRepository;
 import com.rant.sfbackend.repositories.RoleRepository;
 import com.rant.sfbackend.repositories.UserRepository;
+import com.rant.sfbackend.repositories.WalletRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -17,6 +19,8 @@ public class SfBackendApplication implements CommandLineRunner {
 	private RoleRepository roleRepository;
 	private CategoryRepository categoryRepository;
 	private UserRepository userRepository;
+	private WalletRepository walletRepository;
+
 	private PasswordEncoder passwordEncoder;
 
 	public static void main(String[] args) {
@@ -49,11 +53,13 @@ public class SfBackendApplication implements CommandLineRunner {
 		if(categoryRepository.findByCategoryName("Art") == null)
 			categoryRepository.save(new Category("Art"));
 
-
 		if(userRepository.getUserByEmail("admin@mail.com") == null) {
+			Wallet wallet = new Wallet();
 			User admin = new User("admin@mail.com", "admin", "+7", passwordEncoder.encode("admin"));
 			admin.getRoles().add(roleRepository.findByAuthority("admin"));
 			admin.getRoles().add(roleRepository.findByAuthority("user"));
+			admin.setWallet(wallet);
+			walletRepository.save(wallet);
 			userRepository.save(admin);
 		}
 	}
@@ -71,6 +77,11 @@ public class SfBackendApplication implements CommandLineRunner {
 	@Autowired
 	public void setUserRepository(UserRepository userRepository) {
 		this.userRepository = userRepository;
+	}
+
+	@Autowired
+	public void setWalletRepository(WalletRepository walletRepository) {
+		this.walletRepository = walletRepository;
 	}
 
 	@Autowired

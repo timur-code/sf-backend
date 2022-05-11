@@ -31,14 +31,23 @@ public class SfBackendApplication implements CommandLineRunner {
 		if(roleRepository.findByAuthority("admin") == null)
 			roleRepository.save(new Role("admin"));
 
-		if(categoryRepository.findByCategoryName("TV") == null)
-			categoryRepository.save(new Category("TV"));
+		if(categoryRepository.findByCategoryName("Electronics") == null)
+			categoryRepository.save(new Category("Electronics"));
 
-		if(categoryRepository.findByCategoryName("PC") == null)
-			categoryRepository.save(new Category("PC"));
+		if(categoryRepository.findByCategoryName("Fashion") == null)
+			categoryRepository.save(new Category("Fashion"));
 
-		if(categoryRepository.findByCategoryName("Games") == null)
-			categoryRepository.save(new Category("Games"));
+		if(categoryRepository.findByCategoryName("Health") == null)
+			categoryRepository.save(new Category("Health"));
+
+		if(categoryRepository.findByCategoryName("For Home") == null)
+			categoryRepository.save(new Category("For Home"));
+
+		if(categoryRepository.findByCategoryName("Sports") == null)
+			categoryRepository.save(new Category("Sports"));
+
+		if(categoryRepository.findByCategoryName("Art") == null)
+			categoryRepository.save(new Category("Art"));
 
 
 		if(userRepository.getUserByEmail("admin@mail.com") == null) {

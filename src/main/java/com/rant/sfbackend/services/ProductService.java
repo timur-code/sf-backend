@@ -65,8 +65,14 @@ public class ProductService {
         return new ProductResponse(product.get());
     }
 
-    public List<ProductResponse> getAllProducts() {
-        List<Product> products = productRepository.findAll();
+    public List<ProductResponse> getAllProducts(String categoryName) {
+        List<Product> products;
+        if(categoryName != null && categoryName.length() > 0) {
+            Category category = categoryRepository.findByCategoryName(categoryName);
+            products = productRepository.findAllByCategory(category);
+        } else {
+            products = productRepository.findAll();
+        }
         List<ProductResponse> productResponses = new ArrayList<>();
         for(Product product: products) {
             if(!product.isBought() && !product.isInCart())
